@@ -11,27 +11,33 @@ app.use(cors({
 }));
 
 app.get('/sapi/v1/margin/allAssets', (req, res) => {
-  const API_URL = 'https://api.binance.com/sapi/v1/margin/allAssets';
-  const options = {
-    url: API_URL,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-MBX-APIKEY': process.env.API_KEY,
-      'redirect': 'follow'
-    }
-  };
-
-  request(options, (error, response, body) => {
-    if (error) {
-      return res.status(500).json({ type: 'error', message: error.message });
-    }
-    if (response.statusCode !== 200) {
-      return res.status(500).json({ type: 'error', message: 'Failed to fetch data' });
-    }
-
-    res.json(JSON.parse(body));
+    const API_URL = 'https://api.binance.com/sapi/v1/margin/allAssets';
+    const options = {
+      url: API_URL,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-MBX-APIKEY': process.env.API_KEY,
+        'redirect': 'follow'
+      }
+    };
+  
+    // Log the API key being used
+    console.log('Using API Key:', process.env.API_KEY);
+  
+    request(options, (error, response, body) => {
+      if (error) {
+        console.error('Error making request:', error);
+        return res.status(500).json({ type: 'error', message: error.message });
+      }
+      console.log('Response status code:', response.statusCode);
+      if (response.statusCode !== 200) {
+        console.error('Failed to fetch data:', body);
+        return res.status(500).json({ type: 'error', message: 'Failed to fetch data' });
+      }
+  
+      res.json(JSON.parse(body));
+    });
   });
-});
 
 app.get('/api/v3/ticker/price', (req, res) => {
   const { symbols } = req.query;

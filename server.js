@@ -14,7 +14,7 @@ app.get('/sapi/v1/margin/allAssets', (req, res) => {
     url: API_URL,
     headers: {
       'Content-Type': 'application/json',
-      'X-MBX-APIKEY': '9M88haLggrucTacRnx3sKCOc1aw1QvxrsVljlRu0SdR1g8fFyb92icUArZl2uUFt', // Replace 'xxx' with your actual API key
+      'X-MBX-APIKEY': process.env.API_KEY, // Read the key from .env file
       'redirect': 'follow'
     }
   };

@@ -1,6 +1,6 @@
 require('dotenv').config();
-
 const express = require('express');
+const serverless = require('serverless-http');
 const request = require('request');
 const cors = require('cors');
 
@@ -12,14 +12,11 @@ app.use(cors({
 
 app.get('/sapi/v1/margin/allAssets', (req, res) => {
   const API_URL = 'https://api.binance.com/sapi/v1/margin/allAssets';
-
-  // console.log('process.env.API_KEY', process.env.API_KEY);
-
   const options = {
     url: API_URL,
     headers: {
       'Content-Type': 'application/json',
-      'X-MBX-APIKEY': process.env.API_KEY, // Read the key from .env file
+      'X-MBX-APIKEY': process.env.API_KEY,
       'redirect': 'follow'
     }
   };
@@ -36,20 +33,14 @@ app.get('/sapi/v1/margin/allAssets', (req, res) => {
   });
 });
 
-// Add a new route for the ticker/price endpoint
 app.get('/api/v3/ticker/price', (req, res) => {
   const { symbols } = req.query;
-
-  var API_URL;
-  // Check if symbols parameter is present
+  let API_URL;
   if (symbols) {
-    // If symbols parameter is present, use it directly in the API URL
     API_URL = `https://testnet.binance.vision/api/v3/ticker/price?symbols=${symbols}`;
   } else {
-    // If symbols parameter is not present, make the API call to the base endpoint
     API_URL = 'https://testnet.binance.vision/api/v3/ticker/price';
   }
-
 
   request(API_URL, (error, response, body) => {
     if (error) {
@@ -63,7 +54,6 @@ app.get('/api/v3/ticker/price', (req, res) => {
   });
 });
 
-// Add a new route for the klines endpoint (candlestick data)
 app.get('/api/v3/klines', (req, res) => {
   const { symbol, interval } = req.query;
   const API_URL = `https://testnet.binance.vision/api/v3/klines?symbol=${symbol}&interval=${interval}`;
@@ -80,6 +70,4 @@ app.get('/api/v3/klines', (req, res) => {
   });
 });
 
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+module.exports.handler = serverless(app);

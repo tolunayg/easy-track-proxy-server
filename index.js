@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const request = require('request');
 const cors = require('cors');
@@ -10,6 +12,7 @@ app.use(cors({
 
 app.get('/sapi/v1/margin/allAssets', (req, res) => {
   const API_URL = 'https://api.binance.com/sapi/v1/margin/allAssets';
+
   const options = {
     url: API_URL,
     headers: {

@@ -13,6 +13,8 @@ app.use(cors({
 app.get('/sapi/v1/margin/allAssets', (req, res) => {
   const API_URL = 'https://api.binance.com/sapi/v1/margin/allAssets';
 
+  console.log('process.env.API_KEY', process.env.API_KEY);
+
   const options = {
     url: API_URL,
     headers: {
